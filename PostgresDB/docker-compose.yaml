@@ -1,0 +1,32 @@
+# Use postgres/example user/password credentials
+version: '3.1'
+
+services:
+  postgres-server:
+    image: postgres
+    container_name: postgres-svr
+    environment:
+      POSTGRES_PASSWORD: "123456"
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./volume/postgres:/var/lib/postgresql/data 
+    networks:
+      - postgres-network
+      
+  pgadmin-server:
+    image: dpage/pgadmin4
+    container_name: pgadmin-svr
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "admin@admin.com.br"
+      PGADMIN_DEFAULT_PASSWORD: "123456"
+    ports:
+      - "16543:80"
+    depends_on:
+      - postgres-server
+    networks:
+      - postgres-network
+
+networks: 
+  postgres-network:
+    driver: bridge
